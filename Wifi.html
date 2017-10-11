@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>MainActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+MainActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.mit.wifiapp; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.BroadcastReceiver; 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.content.IntentFilter; 
+</span><span class="s0">import </span><span class="s1">android.net.wifi.ScanResult; 
+</span><span class="s0">import </span><span class="s1">android.net.wifi.WifiManager; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+ 
+</span><span class="s0">public class </span><span class="s1">MainActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.activity_main); 
+        </span><span class="s0">final </span><span class="s1">TextView txtConn=(TextView)findViewById(R.id.txtConn); 
+ 
+        </span><span class="s0">final </span><span class="s1">WifiManager wifi=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE); 
+        txtConn.setText(wifi.isWifiEnabled()+</span><span class="s2">&quot; -&gt; &quot;</span><span class="s1">+wifi.getWifiState()); 
+ 
+        </span><span class="s0">if</span><span class="s1">(!wifi.isWifiEnabled()) 
+            </span><span class="s0">if</span><span class="s1">(wifi.getWifiState()!=WifiManager.WIFI_STATE_ENABLING) 
+                wifi.setWifiEnabled(</span><span class="s0">true</span><span class="s1">); 
+ 
+        txtConn.setText(txtConn.getText()+</span><span class="s2">&quot; -&gt; &quot;</span><span class="s1">+wifi.isWifiEnabled()+</span><span class="s2">&quot; -&gt; &quot;</span><span class="s1">+wifi.getWifiState()+</span><span class="s2">&quot; -&gt; &quot;</span><span class="s1">+WifiManager.WIFI_STATE_ENABLED); 
+ 
+        Button btnScan=(Button)findViewById(R.id.btnScan); 
+        btnScan.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onClick(View view) { 
+                registerReceiver(</span><span class="s0">new </span><span class="s1">BroadcastReceiver() { 
+                    @Override 
+                    </span><span class="s0">public void </span><span class="s1">onReceive(Context context, Intent intent) { 
+                        List&lt;ScanResult&gt; results=wifi.getScanResults(); 
+                        </span><span class="s0">for</span><span class="s1">(ScanResult result:results) 
+                        { 
+                            txtConn.setText(txtConn.getText()+</span><span class="s2">&quot;-*-&quot;</span><span class="s1">+result.SSID); 
+                        } 
+ 
+                    } 
+                },</span><span class="s0">new </span><span class="s1">IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)); 
+                wifi.startScan(); 
+            } 
+        }); 
+    } 
+} 
+</span></pre>
+</body>
+</html>
